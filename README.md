@@ -69,7 +69,7 @@ Firefox addon that uses search engines as a genius.
 | メニュー名 | プレフィックス | 検索エンジン |
 | --- | --- | --- |
 | 5ch.io | `site:5ch.io` | DuckDuckGo |
-| wiki.jp | `site:wiki.jp` | DuckDuckGo |
+| ja.wikipedia.org | `site:ja.wikipedia.org` | DuckDuckGo |
 | 画像検索 | （なし） | Google Images |
 | ニコニコ大百科 | `site:dic.nicovideo.jp` | DuckDuckGo |
 | PDFのみ | `filetype:pdf` | DuckDuckGo |
