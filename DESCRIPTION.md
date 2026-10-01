@@ -1,6 +1,4 @@
-# search-genius
-
-Firefox addon that uses search engines as a genius.
+# Search Genius
 
 選択したテキストを、あらかじめ登録した最大5個の「オプション付き」で検索できる Firefox アドオンです。
 
@@ -32,11 +30,9 @@ Firefox addon that uses search engines as a genius.
 
 アドオンの設定ページ（オプションページ）を開き、検索オプションを登録します。
 
-| 項目 | 説明 |
-| --- | --- |
-| メニュー名 | 右クリックメニュー／パネルに表示される名前（例: `GitHub`） |
-| 検索エンジン | 使用する検索エンジン |
-| プレフィックス | 選択テキストの前に付与する検索演算子（例: `site:github.com`） |
+- **メニュー名**: 右クリックメニュー／パネルに表示される名前（例: `GitHub`）
+- **検索エンジン**: 使用する検索エンジン
+- **プレフィックス**: 選択テキストの前に付与する検索演算子（例: `site:github.com`）
 
 「行を追加」で最大5個まで登録でき、「保存」で確定します。
 
@@ -49,27 +45,13 @@ Firefox addon that uses search engines as a genius.
 
 ## 初期オプション
 
-未設定の場合は、以下のオプションが初期値として用意されています。
+未設定の場合は、以下のオプションが初期値として用意されています（検索エンジンはいずれも DuckDuckGo）。
 
-| メニュー名 | プレフィックス | 検索エンジン |
-| --- | --- | --- |
-| Stack Overflow | `site:stackoverflow.com` | DuckDuckGo |
-| Wikipedia | `site:ja.wikipedia.org` | DuckDuckGo |
-| GitHub | `site:github.com` | DuckDuckGo |
-| PDFのみ | `filetype:pdf` | DuckDuckGo |
-| Qiita | `site:qiita.com` | DuckDuckGo |
-
-## ファイル構成
-
-| ファイル | 役割 |
-| --- | --- |
-| `manifest.json` | アドオンのマニフェスト（Manifest V3） |
-| `background.js` | 右クリックメニューの構築、検索 URL の生成、タブを開く処理 |
-| `content.js` | `contextMenus` 非対応環境向けの選択パネル |
-| `options.html` / `options.js` | 検索オプションの設定ページ |
-| `_locales/ja/messages.json` | 日本語の UI 文言 |
-| `_locales/en/messages.json` | 英語の UI 文言 |
-| `icons/` | アドオンのアイコン |
+- **Stack Overflow**: `site:stackoverflow.com`
+- **Wikipedia**: `site:ja.wikipedia.org`
+- **GitHub**: `site:github.com`
+- **PDFのみ**: `filetype:pdf`
+- **Qiita**: `site:qiita.com`
 
 ## 動作要件
 
@@ -77,6 +59,13 @@ Firefox addon that uses search engines as a genius.
 - 権限: `contextMenus`, `tabs`, `storage`
 - ホスト権限: `http://*/*`, `https://*/*`
 
+## プライバシー
+
+- 選択テキストや設定内容を外部サーバーへ送信することはありません。
+- データ収集は行いません（`data_collection_permissions: none`）。
+- 設定は Firefox アカウントの同期機能（`storage.sync`）を通じてのみ保存されます。
+
 ## ライセンス
 
 `LICENSE` を参照してください。
+

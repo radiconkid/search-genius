@@ -1,0 +1,76 @@
+{
+  "extensionName": {
+    "message": "Search Genius"
+  },
+  "extensionDescription": {
+    "message": "Search selected text with up to 5 preconfigured options. Use the context menu on desktop, or the popup panel shown on text selection in environments without contextMenus support (e.g. Firefox for Android / Iceraven)."
+  },
+  "menuSearchTitle": {
+    "message": "Search \"%s\" with $LABEL$",
+    "placeholders": {
+      "label": {
+        "content": "$1"
+      }
+    }
+  },
+  "defaultOptionLabel": {
+    "message": "Option $INDEX$",
+    "placeholders": {
+      "index": {
+        "content": "$1"
+      }
+    }
+  },
+  "optionStackOverflow": {
+    "message": "Stack Overflow"
+  },
+  "optionWikipedia": {
+    "message": "Wikipedia"
+  },
+  "optionGitHub": {
+    "message": "GitHub"
+  },
+  "optionPdfOnly": {
+    "message": "PDF only"
+  },
+  "optionQiita": {
+    "message": "Qiita"
+  },
+  "optionsPageTitle": {
+    "message": "Search Options"
+  },
+  "optionsHeading": {
+    "message": "Search Options"
+  },
+  "optionsDescription": {
+    "message": "You can register up to 5 search options to show in the context menu.<br>The search engine can be chosen per option, and the prefix is a string prepended to the selected text when searching (e.g. <code>site:stackoverflow.com</code>).<br>The settings here are reflected identically in the context menu on desktop and in the popup panel shown on text selection in environments without contextMenus support (e.g. Firefox for Android / Iceraven)."
+  },
+  "columnLabel": {
+    "message": "Menu name"
+  },
+  "columnEngine": {
+    "message": "Search engine"
+  },
+  "columnPrefix": {
+    "message": "Prefix"
+  },
+  "labelPlaceholder": {
+    "message": "Menu name"
+  },
+  "prefixPlaceholder": {
+    "message": "e.g. site:example.com"
+  },
+  "removeButton": {
+    "message": "Remove"
+  },
+  "addRowButton": {
+    "message": "Add row"
+  },
+  "saveButton": {
+    "message": "Save"
+  },
+  "savedStatus": {
+    "message": "Saved"
+  }
+}
+

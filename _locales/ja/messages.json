@@ -1,0 +1,76 @@
+{
+  "extensionName": {
+    "message": "Search Genius"
+  },
+  "extensionDescription": {
+    "message": "選択したテキストを、設定した最大5個のオプション付きで検索します。デスクトップでは右クリックメニュー、contextMenus未対応環境（Android版Firefox/Iceraven等）では選択時のポップアップパネルから検索を実行できます。"
+  },
+  "menuSearchTitle": {
+    "message": "$LABEL$で \"%s\" を検索",
+    "placeholders": {
+      "label": {
+        "content": "$1"
+      }
+    }
+  },
+  "defaultOptionLabel": {
+    "message": "オプション$INDEX$",
+    "placeholders": {
+      "index": {
+        "content": "$1"
+      }
+    }
+  },
+  "optionStackOverflow": {
+    "message": "Stack Overflow"
+  },
+  "optionWikipedia": {
+    "message": "Wikipedia"
+  },
+  "optionGitHub": {
+    "message": "GitHub"
+  },
+  "optionPdfOnly": {
+    "message": "PDFのみ"
+  },
+  "optionQiita": {
+    "message": "Qiita"
+  },
+  "optionsPageTitle": {
+    "message": "検索オプション設定"
+  },
+  "optionsHeading": {
+    "message": "検索オプション設定"
+  },
+  "optionsDescription": {
+    "message": "右クリックメニューに表示する検索オプションを最大5個まで登録できます。<br>「検索エンジン」はオプションごとに選択でき、「プレフィックス」は選択テキストの前に付けて検索する文字列です（例: <code>site:stackoverflow.com</code>）。<br>ここで設定した内容は、デスクトップでは右クリックメニューに、contextMenus未対応環境（Android版Firefox/Iceraven等）ではテキスト選択時のポップアップパネルに、同じ内容で反映されます。"
+  },
+  "columnLabel": {
+    "message": "メニュー名"
+  },
+  "columnEngine": {
+    "message": "検索エンジン"
+  },
+  "columnPrefix": {
+    "message": "プレフィックス"
+  },
+  "labelPlaceholder": {
+    "message": "メニュー名"
+  },
+  "prefixPlaceholder": {
+    "message": "例: site:example.com"
+  },
+  "removeButton": {
+    "message": "削除"
+  },
+  "addRowButton": {
+    "message": "行を追加"
+  },
+  "saveButton": {
+    "message": "保存"
+  },
+  "savedStatus": {
+    "message": "保存しました"
+  }
+}
+
