@@ -10,14 +10,29 @@
 const STORAGE_KEY = "searchOptions";
 
 // 未設定時に使われる初期値（background.js / options.js と共通の定義）
-// ラベルはブラウザの表示言語に合わせてローカライズする
-const DEFAULT_OPTIONS = [
-  { label: browser.i18n.getMessage("optionStackOverflow"), prefix: "site:stackoverflow.com", engine: "duckduckgo" },
-  { label: browser.i18n.getMessage("optionWikipedia"), prefix: "site:ja.wikipedia.org", engine: "duckduckgo" },
-  { label: browser.i18n.getMessage("optionGitHub"), prefix: "site:github.com", engine: "duckduckgo" },
-  { label: browser.i18n.getMessage("optionPdfOnly"), prefix: "filetype:pdf", engine: "duckduckgo" },
-  { label: browser.i18n.getMessage("optionQiita"), prefix: "site:qiita.com", engine: "duckduckgo" }
-];
+// ラベルはブラウザの表示言語に合わせてローカライズし、
+// 内容（プレフィックス・エンジン）は日本語環境とそれ以外で切り替える
+function getDefaultOptions() {
+  const isJapanese = browser.i18n.getUILanguage().startsWith("ja");
+
+  if (isJapanese) {
+    return [
+      { label: browser.i18n.getMessage("option5ch"), prefix: "site:5ch.io", engine: "duckduckgo" },
+      { label: browser.i18n.getMessage("optionWikiJp"), prefix: "site:wiki.jp", engine: "duckduckgo" },
+      { label: browser.i18n.getMessage("optionImageSearch"), prefix: "", engine: "google-images" },
+      { label: browser.i18n.getMessage("optionNicoNico"), prefix: "site:dic.nicovideo.jp", engine: "duckduckgo" },
+      { label: browser.i18n.getMessage("optionPdfOnly"), prefix: "filetype:pdf", engine: "duckduckgo" }
+    ];
+  }
+
+  return [
+    { label: browser.i18n.getMessage("optionStackOverflow"), prefix: "site:stackoverflow.com", engine: "duckduckgo" },
+    { label: browser.i18n.getMessage("optionWikipedia"), prefix: "site:en.wikipedia.org", engine: "duckduckgo" },
+    { label: browser.i18n.getMessage("optionGitHub"), prefix: "site:github.com", engine: "duckduckgo" },
+    { label: browser.i18n.getMessage("optionImageSearch"), prefix: "", engine: "google-images" },
+    { label: browser.i18n.getMessage("optionPdfOnly"), prefix: "filetype:pdf", engine: "duckduckgo" }
+  ];
+}
 
 // contextMenus が使えない環境（Android版Firefox/Iceraven等）でのみ選択パネルを有効化する。
 // contextMenus APIはcontent scriptからは参照できないため、background.js に問い合わせる。
@@ -73,9 +88,9 @@ function initSelectionPanel() {
   async function getOptions() {
     try {
       const stored = await browser.storage.sync.get(STORAGE_KEY);
-      return Array.isArray(stored[STORAGE_KEY]) ? stored[STORAGE_KEY] : DEFAULT_OPTIONS;
+      return Array.isArray(stored[STORAGE_KEY]) ? stored[STORAGE_KEY] : getDefaultOptions();
     } catch (err) {
-      return DEFAULT_OPTIONS;
+      return getDefaultOptions();
     }
   }
 

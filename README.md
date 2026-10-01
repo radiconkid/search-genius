@@ -16,10 +16,12 @@ Firefox addon that uses search engines as a genius.
 - **複数の検索エンジンに対応**: オプションごとに検索エンジンを選択できます。
   - DuckDuckGo（デフォルト）
   - Google
+  - Google Images（画像検索）
   - Bing
   - Yahoo! JAPAN
   - YouTube
   - Wikipedia（日本語版）
+- **カスタム検索エンジン**: 組み込みエンジンに加えて、独自の検索エンジンを登録できます。名前と、クエリを挿入する位置に `%s` を含む検索URL（例: `https://example.com/search?q=%s`）を設定すると、オプションの検索エンジンとして選択できるようになります。
 - **環境に応じた呼び出し方法**:
   - デスクトップ版 Firefox: テキスト選択時の**右クリックメニュー**から検索。
   - `contextMenus` 非対応環境（Android版 Firefox / Iceraven 等）: テキスト選択時に表示される**ポップアップパネル**から検索。
@@ -40,6 +42,17 @@ Firefox addon that uses search engines as a genius.
 
 「行を追加」で最大5個まで登録でき、「保存」で確定します。
 
+#### カスタム検索エンジンを登録する
+
+設定ページ下部の「カスタム検索エンジン」セクションで、独自の検索エンジンを登録できます。
+
+| 項目 | 説明 |
+| --- | --- |
+| エンジン名 | 検索エンジンの選択肢に表示される名前（例: `マイ検索`） |
+| 検索URL | クエリを挿入する位置に `%s` を含むURL（例: `https://example.com/search?q=%s`） |
+
+「エンジンを追加」で行を追加し、「保存」で確定します。登録したエンジンは、各オプションの「検索エンジン」欄に「カスタム」グループとして表示され、選択できるようになります。検索URLに `%s` が含まれていない場合は保存時にエラーが表示されます。
+
 ### 2. 選択テキストを検索する
 
 - **デスクトップ版 Firefox**: ページ上のテキストを選択 → 右クリック → 登録したメニュー名を選択。
@@ -49,15 +62,27 @@ Firefox addon that uses search engines as a genius.
 
 ## 初期オプション
 
-未設定の場合は、以下のオプションが初期値として用意されています。
+未設定の場合は、ブラウザの表示言語に応じて以下のオプションが初期値として用意されています。
+
+### 日本語環境
+
+| メニュー名 | プレフィックス | 検索エンジン |
+| --- | --- | --- |
+| 5ch.io | `site:5ch.io` | DuckDuckGo |
+| wiki.jp | `site:wiki.jp` | DuckDuckGo |
+| 画像検索 | （なし） | Google Images |
+| ニコニコ大百科 | `site:dic.nicovideo.jp` | DuckDuckGo |
+| PDFのみ | `filetype:pdf` | DuckDuckGo |
+
+### 日本語以外の環境
 
 | メニュー名 | プレフィックス | 検索エンジン |
 | --- | --- | --- |
 | Stack Overflow | `site:stackoverflow.com` | DuckDuckGo |
-| Wikipedia | `site:ja.wikipedia.org` | DuckDuckGo |
+| Wikipedia | `site:en.wikipedia.org` | DuckDuckGo |
 | GitHub | `site:github.com` | DuckDuckGo |
-| PDFのみ | `filetype:pdf` | DuckDuckGo |
-| Qiita | `site:qiita.com` | DuckDuckGo |
+| Image search | （なし） | Google Images |
+| PDF only | `filetype:pdf` | DuckDuckGo |
 
 ## ファイル構成
 

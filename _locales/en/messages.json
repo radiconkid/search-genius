@@ -36,6 +36,18 @@
   "optionQiita": {
     "message": "Qiita"
   },
+  "option5ch": {
+    "message": "5ch.io"
+  },
+  "optionWikiJp": {
+    "message": "wiki.jp"
+  },
+  "optionImageSearch": {
+    "message": "Image search"
+  },
+  "optionNicoNico": {
+    "message": "Niconico Pedia"
+  },
   "optionsPageTitle": {
     "message": "Search Options"
   },
@@ -71,6 +83,33 @@
   },
   "savedStatus": {
     "message": "Saved"
+  },
+  "customEnginesHeading": {
+    "message": "Custom search engines"
+  },
+  "customEnginesDescription": {
+    "message": "You can add your own search engines. Enter a name and a search URL containing <code>%s</code> where the query should be inserted (e.g. <code>https://example.com/search?q=%s</code>)."
+  },
+  "columnEngineName": {
+    "message": "Engine name"
+  },
+  "columnEngineUrl": {
+    "message": "Search URL (with %s)"
+  },
+  "engineNamePlaceholder": {
+    "message": "e.g. My Search"
+  },
+  "engineUrlPlaceholder": {
+    "message": "e.g. https://example.com/search?q=%s"
+  },
+  "addEngineButton": {
+    "message": "Add engine"
+  },
+  "customEngineGroupLabel": {
+    "message": "Custom"
+  },
+  "invalidEngineUrl": {
+    "message": "Search URL must contain %s."
   }
 }
 

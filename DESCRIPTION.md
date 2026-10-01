@@ -14,10 +14,12 @@
 - **複数の検索エンジンに対応**: オプションごとに検索エンジンを選択できます。
   - DuckDuckGo（デフォルト）
   - Google
+  - Google Images（画像検索）
   - Bing
   - Yahoo! JAPAN
   - YouTube
   - Wikipedia（日本語版）
+- **カスタム検索エンジン**: 組み込みエンジンに加えて、独自の検索エンジンを登録できます。名前と、クエリを挿入する位置に `%s` を含む検索URL（例: `https://example.com/search?q=%s`）を設定すると、オプションの検索エンジンとして選択できるようになります。
 - **環境に応じた呼び出し方法**:
   - デスクトップ版 Firefox: テキスト選択時の**右クリックメニュー**から検索。
   - `contextMenus` 非対応環境（Android版 Firefox / Iceraven 等）: テキスト選択時に表示される**ポップアップパネル**から検索。
@@ -45,13 +47,23 @@
 
 ## 初期オプション
 
-未設定の場合は、以下のオプションが初期値として用意されています（検索エンジンはいずれも DuckDuckGo）。
+未設定の場合は、ブラウザの表示言語に応じて以下のオプションが初期値として用意されています。
 
-- **Stack Overflow**: `site:stackoverflow.com`
-- **Wikipedia**: `site:ja.wikipedia.org`
-- **GitHub**: `site:github.com`
-- **PDFのみ**: `filetype:pdf`
-- **Qiita**: `site:qiita.com`
+### 日本語環境
+
+- **5ch.io**: `site:5ch.io`（DuckDuckGo）
+- **wiki.jp**: `site:wiki.jp`（DuckDuckGo）
+- **画像検索**: プレフィックスなし（Google Images）
+- **ニコニコ大百科**: `site:dic.nicovideo.jp`（DuckDuckGo）
+- **PDFのみ**: `filetype:pdf`（DuckDuckGo）
+
+### 日本語以外の環境
+
+- **Stack Overflow**: `site:stackoverflow.com`（DuckDuckGo）
+- **Wikipedia**: `site:en.wikipedia.org`（DuckDuckGo）
+- **GitHub**: `site:github.com`（DuckDuckGo）
+- **Image search**: プレフィックスなし（Google Images）
+- **PDF only**: `filetype:pdf`（DuckDuckGo）
 
 ## 動作要件
 

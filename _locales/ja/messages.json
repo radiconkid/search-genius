@@ -36,6 +36,18 @@
   "optionQiita": {
     "message": "Qiita"
   },
+  "option5ch": {
+    "message": "5ch.io"
+  },
+  "optionWikiJp": {
+    "message": "wiki.jp"
+  },
+  "optionImageSearch": {
+    "message": "画像検索"
+  },
+  "optionNicoNico": {
+    "message": "ニコニコ大百科"
+  },
   "optionsPageTitle": {
     "message": "検索オプション設定"
   },
@@ -71,6 +83,33 @@
   },
   "savedStatus": {
     "message": "保存しました"
+  },
+  "customEnginesHeading": {
+    "message": "カスタム検索エンジン"
+  },
+  "customEnginesDescription": {
+    "message": "独自の検索エンジンを追加できます。名前と、クエリを挿入する位置に <code>%s</code> を含む検索URLを入力してください（例: <code>https://example.com/search?q=%s</code>）。"
+  },
+  "columnEngineName": {
+    "message": "エンジン名"
+  },
+  "columnEngineUrl": {
+    "message": "検索URL（%s を含む）"
+  },
+  "engineNamePlaceholder": {
+    "message": "例: マイ検索"
+  },
+  "engineUrlPlaceholder": {
+    "message": "例: https://example.com/search?q=%s"
+  },
+  "addEngineButton": {
+    "message": "エンジンを追加"
+  },
+  "customEngineGroupLabel": {
+    "message": "カスタム"
+  },
+  "invalidEngineUrl": {
+    "message": "検索URLには %s を含めてください。"
   }
 }
 

@@ -4,12 +4,14 @@
 // content.jsの選択パネル（Android等contextMenus非対応環境）から呼び出す。
 
 const STORAGE_KEY = "searchOptions";
+const CUSTOM_ENGINES_KEY = "customEngines";
 const MENU_ID_PREFIX = "search-option-";
 
 // 選択可能な検索エンジン（options.js / content.js と共通の定義）
 const SEARCH_ENGINES = {
   duckduckgo: "https://duckduckgo.com/?q=%s",
   google: "https://www.google.com/search?q=%s",
+  "google-images": "https://www.google.com/search?tbm=isch&q=%s",
   bing: "https://www.bing.com/search?q=%s",
   yahoo: "https://search.yahoo.co.jp/search?p=%s",
   youtube: "https://www.youtube.com/results?search_query=%s",
@@ -19,42 +21,77 @@ const SEARCH_ENGINES = {
 const DEFAULT_ENGINE = "duckduckgo";
 
 // 初期値（未設定時に使われる）
-// ラベルはブラウザの表示言語に合わせてローカライズする
-const DEFAULT_OPTIONS = [
-  { label: browser.i18n.getMessage("optionStackOverflow"), prefix: "site:stackoverflow.com", engine: "duckduckgo" },
-  { label: browser.i18n.getMessage("optionWikipedia"), prefix: "site:ja.wikipedia.org", engine: "duckduckgo" },
-  { label: browser.i18n.getMessage("optionGitHub"), prefix: "site:github.com", engine: "duckduckgo" },
-  { label: browser.i18n.getMessage("optionPdfOnly"), prefix: "filetype:pdf", engine: "duckduckgo" },
-  { label: browser.i18n.getMessage("optionQiita"), prefix: "site:qiita.com", engine: "duckduckgo" }
-];
+// ラベルはブラウザの表示言語に合わせてローカライズし、
+// 内容（プレフィックス・エンジン）は日本語環境とそれ以外で切り替える
+function getDefaultOptions() {
+  const isJapanese = browser.i18n.getUILanguage().startsWith("ja");
 
-// 右クリックメニュー用に、現在構築済みのメニューIDとオプションの対応を保持する
-let currentOptions = [];
+  if (isJapanese) {
+    return [
+      { label: browser.i18n.getMessage("option5ch"), prefix: "site:5ch.io", engine: "duckduckgo" },
+      { label: browser.i18n.getMessage("optionWikiJp"), prefix: "site:wiki.jp", engine: "duckduckgo" },
+      { label: browser.i18n.getMessage("optionImageSearch"), prefix: "", engine: "google-images" },
+      { label: browser.i18n.getMessage("optionNicoNico"), prefix: "site:dic.nicovideo.jp", engine: "duckduckgo" },
+      { label: browser.i18n.getMessage("optionPdfOnly"), prefix: "filetype:pdf", engine: "duckduckgo" }
+    ];
+  }
+
+  return [
+    { label: browser.i18n.getMessage("optionStackOverflow"), prefix: "site:stackoverflow.com", engine: "duckduckgo" },
+    { label: browser.i18n.getMessage("optionWikipedia"), prefix: "site:en.wikipedia.org", engine: "duckduckgo" },
+    { label: browser.i18n.getMessage("optionGitHub"), prefix: "site:github.com", engine: "duckduckgo" },
+    { label: browser.i18n.getMessage("optionImageSearch"), prefix: "", engine: "google-images" },
+    { label: browser.i18n.getMessage("optionPdfOnly"), prefix: "filetype:pdf", engine: "duckduckgo" }
+  ];
+}
 
 // 保存済みオプションを取得する
 async function getOptions() {
   const stored = await browser.storage.sync.get(STORAGE_KEY);
-  return Array.isArray(stored[STORAGE_KEY]) ? stored[STORAGE_KEY] : DEFAULT_OPTIONS;
+  return Array.isArray(stored[STORAGE_KEY]) ? stored[STORAGE_KEY] : getDefaultOptions();
+}
+
+// 保存済みカスタム検索エンジンを取得する
+async function getCustomEngines() {
+  const stored = await browser.storage.sync.get(CUSTOM_ENGINES_KEY);
+  return Array.isArray(stored[CUSTOM_ENGINES_KEY]) ? stored[CUSTOM_ENGINES_KEY] : [];
+}
+
+// エンジンIDから検索URLテンプレートを解決する
+// 組み込みエンジンになければ、カスタムエンジン（storage保存）から探す
+async function resolveEngineTemplate(engineId) {
+  if (SEARCH_ENGINES[engineId]) return SEARCH_ENGINES[engineId];
+
+  const customEngines = await getCustomEngines();
+  const custom = customEngines.find((engine) => engine.id === engineId);
+  if (custom && custom.url) return custom.url;
+
+  return SEARCH_ENGINES[DEFAULT_ENGINE];
 }
 
 // オプションと選択テキストから検索URLを組み立てる
 // （contextMenusルート・content.jsルートの両方から利用する共通ロジック）
-function buildSearchUrl(option, selectedText) {
+async function buildSearchUrl(option, selectedText) {
   const prefix = (option.prefix || "").trim();
   const query = prefix ? `${prefix} ${selectedText}` : selectedText;
-  const template = SEARCH_ENGINES[option.engine] || SEARCH_ENGINES[DEFAULT_ENGINE];
+  const template = await resolveEngineTemplate(option.engine);
   return template.replace("%s", encodeURIComponent(query));
 }
 
 // 検索結果タブを開く
-function openSearchTab(option, selectedText, originIndex) {
-  const url = buildSearchUrl(option, selectedText);
-  const createProps = { url, active: true };
-  // 検索を開いた元タブのすぐ隣に新規タブを開く（originIndexが分かる場合のみ）
-  if (typeof originIndex === "number") {
-    createProps.index = originIndex + 1;
+async function openSearchTab(option, selectedText, originIndex) {
+  try {
+    const url = await buildSearchUrl(option, selectedText);
+    const createProps = { url, active: true };
+    // 検索を開いた元タブのすぐ隣に新規タブを開く（originIndexが分かる場合のみ）
+    if (typeof originIndex === "number") {
+      createProps.index = originIndex + 1;
+    }
+    await browser.tabs.create(createProps);
+  } catch (err) {
+    // 失敗を握りつぶさずログに残す（原因調査のため）
+    console.error("Search Genius: failed to open search tab", err);
   }
-  browser.tabs.create(createProps);
 }
 
 // 保存済みオプションから右クリックメニューを再構築する
@@ -64,9 +101,9 @@ async function rebuildMenus() {
 
   await browser.contextMenus.removeAll();
 
-  currentOptions = await getOptions();
+  const options = await getOptions();
 
-  currentOptions.forEach((option, index) => {
+  options.forEach((option, index) => {
     const label = option.label || option.prefix || browser.i18n.getMessage("defaultOptionLabel", [String(index + 1)]);
     browser.contextMenus.create({
       id: `${MENU_ID_PREFIX}${index}`,
@@ -79,7 +116,7 @@ async function rebuildMenus() {
 // メニュークリック時に選択テキストをオプション付きで検索する
 // （contextMenus対応環境のみ）
 if (typeof browser.contextMenus !== "undefined") {
-  browser.contextMenus.onClicked.addListener((info, tab) => {
+  browser.contextMenus.onClicked.addListener(async (info, tab) => {
     const selectedText = info.selectionText;
     if (!selectedText) return;
 
@@ -87,7 +124,10 @@ if (typeof browser.contextMenus !== "undefined") {
     if (!menuId.startsWith(MENU_ID_PREFIX)) return;
 
     const index = Number(menuId.slice(MENU_ID_PREFIX.length));
-    const option = currentOptions[index];
+    // イベントページが再起動した直後はメモリ上の状態が空のことがあるため、
+    // クリック時点で保存済みオプションを読み直してから解決する
+    const options = await getOptions();
+    const option = options[index];
     if (!option) return;
 
     openSearchTab(option, selectedText, tab.index);
@@ -117,8 +157,9 @@ browser.runtime.onMessage.addListener(async (message, sender) => {
 });
 
 // 設定変更時にメニューを再構築する
+// （カスタムエンジンの変更はメニュー表示には影響しないが、URL解決に使うため再構築しておく）
 browser.storage.onChanged.addListener((changes, area) => {
-  if (area === "sync" && changes[STORAGE_KEY]) {
+  if (area === "sync" && (changes[STORAGE_KEY] || changes[CUSTOM_ENGINES_KEY])) {
     rebuildMenus();
   }
 });
