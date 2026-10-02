@@ -48,6 +48,12 @@
   "optionNicoNico": {
     "message": "ニコニコ大百科"
   },
+  "engine5chSearch": {
+    "message": "5ch検索"
+  },
+  "engineNicoNicoSearch": {
+    "message": "ニコニコ大百科検索"
+  },
   "optionsPageTitle": {
     "message": "検索オプション設定"
   },
@@ -110,6 +116,129 @@
   },
   "invalidEngineUrl": {
     "message": "検索URLには %s を含めてください。"
+  },
+  "operatorsHeading": {
+    "message": "検索演算子チートシート"
+  },
+  "operatorsDescription": {
+    "message": "検索演算子はクエリを絞り込むためのキーワードです。プレフィックス欄で組み合わせると、エキスパートのように検索できます。"
+  },
+  "showOperatorsButton": {
+    "message": "チートシートを表示"
+  },
+  "hideOperatorsButton": {
+    "message": "チートシートを隠す"
+  },
+  "operatorsBasicHeading": {
+    "message": "基本の絞り込み"
+  },
+  "operatorsColumnPurpose": {
+    "message": "目的"
+  },
+  "operatorsColumnExample": {
+    "message": "例"
+  },
+  "operatorsColumnEffect": {
+    "message": "効果"
+  },
+  "opExactPurpose": {
+    "message": "完全一致"
+  },
+  "opExactEffect": {
+    "message": "フレーズ全体が一致するページだけ"
+  },
+  "opExcludePurpose": {
+    "message": "除外"
+  },
+  "opExcludeEffect": {
+    "message": "除外した語を含むページを除く"
+  },
+  "opOrPurpose": {
+    "message": "OR検索"
+  },
+  "opOrEffect": {
+    "message": "どちらかを含むページ"
+  },
+  "opWildcardPurpose": {
+    "message": "ワイルドカード"
+  },
+  "opWildcardEffect": {
+    "message": "「*」に任意の語が入る"
+  },
+  "opRangePurpose": {
+    "message": "範囲指定"
+  },
+  "opRangeEffect": {
+    "message": "数値や年の範囲"
+  },
+  "operatorsSiteHeading": {
+    "message": "サイト・ページ構造を調べる"
+  },
+  "opSiteEffect": {
+    "message": "そのドメインのインデックス状況を確認する"
+  },
+  "opSiteKeywordEffect": {
+    "message": "特定サイト内だけを検索する"
+  },
+  "opIntitleEffect": {
+    "message": "タイトルに語を含むページ"
+  },
+  "opAllintitleEffect": {
+    "message": "タイトルにすべての語を含むページ"
+  },
+  "opInurlEffect": {
+    "message": "URLに特定の文字列を含むページ"
+  },
+  "opIntextEffect": {
+    "message": "本文に語を含むページ"
+  },
+  "opRelatedEffect": {
+    "message": "関連サイト（現在は精度が低め）"
+  },
+  "operatorsFileHeading": {
+    "message": "ファイル形式で探す"
+  },
+  "opFiletypePdfEffect": {
+    "message": "PDF資料"
+  },
+  "opFiletypeXlsxEffect": {
+    "message": "Excelファイル"
+  },
+  "opFiletypeGovEffect": {
+    "message": "官公庁のPDF白書"
+  },
+  "operatorsFileNote": {
+    "message": "信頼できる一次情報を探すときに特に便利です。"
+  },
+  "operatorsDateHeading": {
+    "message": "日付で絞る"
+  },
+  "opAfterEffect": {
+    "message": "指定日以降"
+  },
+  "opBeforeEffect": {
+    "message": "指定日以前"
+  },
+  "operatorsCombosHeading": {
+    "message": "組み合わせ例"
+  },
+  "operatorsTipsHeading": {
+    "message": "組み合わせのコツ"
+  },
+  "opTipBroad": {
+    "message": "まず広く検索して、結果を見ながら少しずつ絞る"
+  },
+  "opTipExclude": {
+    "message": "除外（-）を使って、ノイズ（同名の別分野など）を削る"
+  },
+  "opTipPrimary": {
+    "message": "site: と filetype: の組み合わせで、一次資料に直行する"
+  },
+  "opTipEnglish": {
+    "message": "英語でも検索すると、情報量が大きく変わることが多い"
+  },
+  "operatorsNote": {
+    "message": "近年のGoogleは演算子を厳密に処理しない場合があります。結果が期待と違うときは、引用符を足す、語を減らすなど調整してください。Bing、DuckDuckGoなど他の検索エンジンでも多くの演算子が使えますが、細かい仕様は異なります。"
   }
 }
 

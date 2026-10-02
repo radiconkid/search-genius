@@ -70,6 +70,36 @@
     .col-engine-url {
       width: 60%;
     }
+    h3 {
+      font-size: 14px;
+      margin-top: 20px;
+      margin-bottom: 6px;
+    }
+    code {
+      font-family: monospace;
+      background: #f2f2f2;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 12px;
+    }
+    .col-op-purpose {
+      width: 20%;
+    }
+    .col-op-example {
+      width: 45%;
+    }
+    .col-op-effect {
+      width: 35%;
+    }
+    ul.tips {
+      font-size: 13px;
+      color: #555;
+      margin: 6px 0;
+      padding-left: 20px;
+    }
+    ul.tips li {
+      margin-bottom: 4px;
+    }
   </style>
 </head>
 <body>
@@ -120,6 +150,176 @@
 
   <div id="engine-actions">
     <button id="add-engine" type="button" data-i18n="addEngineButton">Add engine</button>
+  </div>
+
+  <h2 data-i18n="operatorsHeading">Search operator cheat sheet</h2>
+  <p class="description" data-i18n-html="operatorsDescription">
+    Search operators are keywords that refine a query. Combine them in the prefix field to search like an expert.
+  </p>
+
+  <div id="operators-actions">
+    <button id="toggle-operators" type="button" aria-expanded="false" aria-controls="operators-content" data-i18n="showOperatorsButton">Show cheat sheet</button>
+  </div>
+
+  <div id="operators-content" hidden>
+
+  <h3 data-i18n="operatorsBasicHeading">Basic filters</h3>
+  <table>
+    <thead>
+      <tr>
+        <th class="col-op-purpose" data-i18n="operatorsColumnPurpose">Purpose</th>
+        <th class="col-op-example" data-i18n="operatorsColumnExample">Example</th>
+        <th class="col-op-effect" data-i18n="operatorsColumnEffect">Effect</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-i18n="opExactPurpose">Exact match</td>
+        <td><code>"search engine optimization"</code></td>
+        <td data-i18n="opExactEffect">Pages containing the exact phrase</td>
+      </tr>
+      <tr>
+        <td data-i18n="opExcludePurpose">Exclude</td>
+        <td><code>jaguar -car</code></td>
+        <td data-i18n="opExcludeEffect">Pages that do not contain the excluded word</td>
+      </tr>
+      <tr>
+        <td data-i18n="opOrPurpose">OR search</td>
+        <td><code>SEO OR SEM</code></td>
+        <td data-i18n="opOrEffect">Pages containing either term</td>
+      </tr>
+      <tr>
+        <td data-i18n="opWildcardPurpose">Wildcard</td>
+        <td><code>"the most * way"</code></td>
+        <td data-i18n="opWildcardEffect">Any word can fill the <code>*</code></td>
+      </tr>
+      <tr>
+        <td data-i18n="opRangePurpose">Range</td>
+        <td><code>camera 2020..2024</code></td>
+        <td data-i18n="opRangeEffect">Numeric or year range</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 data-i18n="operatorsSiteHeading">Site and page structure</h3>
+  <table>
+    <thead>
+      <tr>
+        <th class="col-op-example" data-i18n="operatorsColumnExample">Example</th>
+        <th class="col-op-effect" data-i18n="operatorsColumnEffect">Effect</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>site:example.com</code></td>
+        <td data-i18n="opSiteEffect">Check the indexed pages of a domain</td>
+      </tr>
+      <tr>
+        <td><code>site:example.com "keyword"</code></td>
+        <td data-i18n="opSiteKeywordEffect">Search only within a specific site</td>
+      </tr>
+      <tr>
+        <td><code>intitle:"review" laptop</code></td>
+        <td data-i18n="opIntitleEffect">Pages with the word in the title</td>
+      </tr>
+      <tr>
+        <td><code>allintitle:SEO tools comparison</code></td>
+        <td data-i18n="opAllintitleEffect">Pages with all words in the title</td>
+      </tr>
+      <tr>
+        <td><code>inurl:blog</code></td>
+        <td data-i18n="opInurlEffect">Pages with the string in the URL</td>
+      </tr>
+      <tr>
+        <td><code>intext:"pricing"</code></td>
+        <td data-i18n="opIntextEffect">Pages with the word in the body</td>
+      </tr>
+      <tr>
+        <td><code>related:example.com</code></td>
+        <td data-i18n="opRelatedEffect">Related sites (currently less accurate)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 data-i18n="operatorsFileHeading">File types</h3>
+  <table>
+    <thead>
+      <tr>
+        <th class="col-op-example" data-i18n="operatorsColumnExample">Example</th>
+        <th class="col-op-effect" data-i18n="operatorsColumnEffect">Effect</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>filetype:pdf market report 2025</code></td>
+        <td data-i18n="opFiletypePdfEffect">PDF documents</td>
+      </tr>
+      <tr>
+        <td><code>filetype:xlsx sales template</code></td>
+        <td data-i18n="opFiletypeXlsxEffect">Excel files</td>
+      </tr>
+      <tr>
+        <td><code>site:go.jp filetype:pdf whitepaper</code></td>
+        <td data-i18n="opFiletypeGovEffect">Government PDF whitepapers</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="description" data-i18n="operatorsFileNote">
+    Especially useful when looking for reliable primary sources.
+  </p>
+
+  <h3 data-i18n="operatorsDateHeading">Filter by date</h3>
+  <table>
+    <thead>
+      <tr>
+        <th class="col-op-example" data-i18n="operatorsColumnExample">Example</th>
+        <th class="col-op-effect" data-i18n="operatorsColumnEffect">Effect</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>after:2025-06-01</code></td>
+        <td data-i18n="opAfterEffect">On or after the specified date</td>
+      </tr>
+      <tr>
+        <td><code>before:2024-12-31</code></td>
+        <td data-i18n="opBeforeEffect">On or before the specified date</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 data-i18n="operatorsCombosHeading">Combination examples</h3>
+  <table>
+    <thead>
+      <tr>
+        <th class="col-op-example" data-i18n="operatorsColumnExample">Example</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>site:.go.jp filetype:pdf "statistics" population 2024..2025</code></td>
+      </tr>
+      <tr>
+        <td><code>intitle:"minutes" site:.lg.jp "digitalization"</code></td>
+      </tr>
+      <tr>
+        <td><code>"founder" "interview" -advertising -PR after:2024-01-01</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3 data-i18n="operatorsTipsHeading">Tips</h3>
+  <ul class="tips">
+    <li data-i18n="opTipBroad">Start broad, then narrow down while checking the results.</li>
+    <li data-i18n="opTipExclude">Use exclusion (<code>-</code>) to remove noise such as unrelated fields with the same name.</li>
+    <li data-i18n="opTipPrimary">Combine <code>site:</code> and <code>filetype:</code> to jump straight to primary sources.</li>
+    <li data-i18n="opTipEnglish">Searching in English often changes the amount of information significantly.</li>
+  </ul>
+
+  <p class="description" data-i18n-html="operatorsNote">
+    Google may not strictly process operators these days. If results differ from your expectations, adjust by adding quotes or reducing words. Many operators also work on Bing, DuckDuckGo and others, but the details differ.
+  </p>
+
   </div>
 
   <script src="options.js"></script>

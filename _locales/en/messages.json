@@ -48,6 +48,12 @@
   "optionNicoNico": {
     "message": "Niconico Pedia"
   },
+  "engine5chSearch": {
+    "message": "5ch search"
+  },
+  "engineNicoNicoSearch": {
+    "message": "Niconico Pedia search"
+  },
   "optionsPageTitle": {
     "message": "Search Options"
   },
@@ -110,6 +116,129 @@
   },
   "invalidEngineUrl": {
     "message": "Search URL must contain %s."
+  },
+  "operatorsHeading": {
+    "message": "Search operator cheat sheet"
+  },
+  "operatorsDescription": {
+    "message": "Search operators are keywords that refine a query. Combine them in the prefix field to search like an expert."
+  },
+  "showOperatorsButton": {
+    "message": "Show cheat sheet"
+  },
+  "hideOperatorsButton": {
+    "message": "Hide cheat sheet"
+  },
+  "operatorsBasicHeading": {
+    "message": "Basic filters"
+  },
+  "operatorsColumnPurpose": {
+    "message": "Purpose"
+  },
+  "operatorsColumnExample": {
+    "message": "Example"
+  },
+  "operatorsColumnEffect": {
+    "message": "Effect"
+  },
+  "opExactPurpose": {
+    "message": "Exact match"
+  },
+  "opExactEffect": {
+    "message": "Pages containing the exact phrase"
+  },
+  "opExcludePurpose": {
+    "message": "Exclude"
+  },
+  "opExcludeEffect": {
+    "message": "Pages that do not contain the excluded word"
+  },
+  "opOrPurpose": {
+    "message": "OR search"
+  },
+  "opOrEffect": {
+    "message": "Pages containing either term"
+  },
+  "opWildcardPurpose": {
+    "message": "Wildcard"
+  },
+  "opWildcardEffect": {
+    "message": "Any word can fill the <code>*</code>"
+  },
+  "opRangePurpose": {
+    "message": "Range"
+  },
+  "opRangeEffect": {
+    "message": "Numeric or year range"
+  },
+  "operatorsSiteHeading": {
+    "message": "Site and page structure"
+  },
+  "opSiteEffect": {
+    "message": "Check the indexed pages of a domain"
+  },
+  "opSiteKeywordEffect": {
+    "message": "Search only within a specific site"
+  },
+  "opIntitleEffect": {
+    "message": "Pages with the word in the title"
+  },
+  "opAllintitleEffect": {
+    "message": "Pages with all words in the title"
+  },
+  "opInurlEffect": {
+    "message": "Pages with the string in the URL"
+  },
+  "opIntextEffect": {
+    "message": "Pages with the word in the body"
+  },
+  "opRelatedEffect": {
+    "message": "Related sites (currently less accurate)"
+  },
+  "operatorsFileHeading": {
+    "message": "File types"
+  },
+  "opFiletypePdfEffect": {
+    "message": "PDF documents"
+  },
+  "opFiletypeXlsxEffect": {
+    "message": "Excel files"
+  },
+  "opFiletypeGovEffect": {
+    "message": "Government PDF whitepapers"
+  },
+  "operatorsFileNote": {
+    "message": "Especially useful when looking for reliable primary sources."
+  },
+  "operatorsDateHeading": {
+    "message": "Filter by date"
+  },
+  "opAfterEffect": {
+    "message": "On or after the specified date"
+  },
+  "opBeforeEffect": {
+    "message": "On or before the specified date"
+  },
+  "operatorsCombosHeading": {
+    "message": "Combination examples"
+  },
+  "operatorsTipsHeading": {
+    "message": "Tips"
+  },
+  "opTipBroad": {
+    "message": "Start broad, then narrow down while checking the results."
+  },
+  "opTipExclude": {
+    "message": "Use exclusion (-) to remove noise such as unrelated fields with the same name."
+  },
+  "opTipPrimary": {
+    "message": "Combine site: and filetype: to jump straight to primary sources."
+  },
+  "opTipEnglish": {
+    "message": "Searching in English often changes the amount of information significantly."
+  },
+  "operatorsNote": {
+    "message": "Google may not strictly process operators these days. If results differ from your expectations, adjust by adding quotes or reducing words. Many operators also work on Bing, DuckDuckGo and others, but the details differ."
   }
 }
 

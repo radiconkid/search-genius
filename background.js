@@ -45,6 +45,23 @@ function getDefaultOptions() {
   ];
 }
 
+// 初期カスタム検索エンジン（未設定時に使われる）
+// ラベルはブラウザの表示言語に合わせてローカライズする
+function getDefaultCustomEngines() {
+  return [
+    {
+      id: "custom-5ch-search",
+      label: browser.i18n.getMessage("engine5chSearch"),
+      url: "https://find.5ch.io/search?q=%s"
+    },
+    {
+      id: "custom-niconico-search",
+      label: browser.i18n.getMessage("engineNicoNicoSearch"),
+      url: "https://dic.nicovideo.jp/s/al/t/%s/rev_created/desc/1-?query_type=t"
+    }
+  ];
+}
+
 // 保存済みオプションを取得する
 async function getOptions() {
   const stored = await browser.storage.sync.get(STORAGE_KEY);
@@ -54,7 +71,7 @@ async function getOptions() {
 // 保存済みカスタム検索エンジンを取得する
 async function getCustomEngines() {
   const stored = await browser.storage.sync.get(CUSTOM_ENGINES_KEY);
-  return Array.isArray(stored[CUSTOM_ENGINES_KEY]) ? stored[CUSTOM_ENGINES_KEY] : [];
+  return Array.isArray(stored[CUSTOM_ENGINES_KEY]) ? stored[CUSTOM_ENGINES_KEY] : getDefaultCustomEngines();
 }
 
 // エンジンIDから検索URLテンプレートを解決する

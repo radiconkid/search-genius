@@ -43,12 +43,31 @@ function getDefaultOptions() {
   ];
 }
 
+// 初期カスタム検索エンジン（未設定時に使われる）
+// ラベルはブラウザの表示言語に合わせてローカライズする
+function getDefaultCustomEngines() {
+  return [
+    {
+      id: "custom-5ch-search",
+      label: browser.i18n.getMessage("engine5chSearch"),
+      url: "https://find.5ch.io/search?q=%s"
+    },
+    {
+      id: "custom-niconico-search",
+      label: browser.i18n.getMessage("engineNicoNicoSearch"),
+      url: "https://dic.nicovideo.jp/s/al/t/%s/rev_created/desc/1-?query_type=t"
+    }
+  ];
+}
+
 const tbody = document.getElementById("options-body");
 const addRowButton = document.getElementById("add-row");
 const saveButton = document.getElementById("save");
 const statusEl = document.getElementById("status");
 const enginesBody = document.getElementById("engines-body");
 const addEngineButton = document.getElementById("add-engine");
+const toggleOperatorsButton = document.getElementById("toggle-operators");
+const operatorsContent = document.getElementById("operators-content");
 
 // 現在読み込まれているカスタム検索エンジン（保存前の編集内容を保持する）
 let customEngines = [];
@@ -211,7 +230,7 @@ async function loadCustomEngines() {
   const stored = await browser.storage.sync.get(CUSTOM_ENGINES_KEY);
   customEngines = Array.isArray(stored[CUSTOM_ENGINES_KEY])
     ? stored[CUSTOM_ENGINES_KEY]
-    : [];
+    : getDefaultCustomEngines();
 
   enginesBody.innerHTML = "";
   for (const engine of customEngines) {
@@ -292,9 +311,21 @@ function refreshEngineSelects() {
   }
 }
 
+// 検索演算子チートシートの表示／非表示を切り替える
+function toggleOperators() {
+  const expanded = toggleOperatorsButton.getAttribute("aria-expanded") === "true";
+  const next = !expanded;
+  toggleOperatorsButton.setAttribute("aria-expanded", String(next));
+  operatorsContent.hidden = !next;
+  toggleOperatorsButton.textContent = browser.i18n.getMessage(
+    next ? "hideOperatorsButton" : "showOperatorsButton"
+  );
+}
+
 addRowButton.addEventListener("click", () => addRow());
 addEngineButton.addEventListener("click", () => addEngineRow());
 saveButton.addEventListener("click", saveOptions);
+toggleOperatorsButton.addEventListener("click", toggleOperators);
 
 // カスタムエンジンを先に読み込んでから、オプション行を描画する
 // （オプション行の <select> にカスタムエンジンを含めるため）

@@ -84,6 +84,15 @@ Firefox addon that uses search engines as a genius.
 | Image search | （なし） | Google Images |
 | PDF only | `filetype:pdf` | DuckDuckGo |
 
+### 初期カスタム検索エンジン
+
+未設定の場合は、以下のカスタム検索エンジンが初期値として用意されています。
+
+| エンジン名 | 検索URL |
+| --- | --- |
+| 5ch検索 | `https://find.5ch.io/search?q=%s` |
+| ニコニコ大百科検索 | `https://dic.nicovideo.jp/s/al/t/%s/rev_created/desc/1-?query_type=t` |
+
 ## ファイル構成
 
 | ファイル | 役割 |

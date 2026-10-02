@@ -65,6 +65,13 @@
 - **Image search**: プレフィックスなし（Google Images）
 - **PDF only**: `filetype:pdf`（DuckDuckGo）
 
+### 初期カスタム検索エンジン
+
+未設定の場合は、以下のカスタム検索エンジンが初期値として用意されています。
+
+- **5ch検索**: `https://find.5ch.io/search?q=%s`
+- **ニコニコ大百科検索**: `https://dic.nicovideo.jp/s/al/t/%s/rev_created/desc/1-?query_type=t`
+
 ## 動作要件
 
 - Firefox 109.0 以上（Manifest V3 対応）
