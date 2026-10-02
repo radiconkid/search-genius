@@ -25,6 +25,7 @@ Firefox addon that uses search engines as a genius.
 - **環境に応じた呼び出し方法**:
   - デスクトップ版 Firefox: テキスト選択時の**右クリックメニュー**から検索。
   - `contextMenus` 非対応環境（Android版 Firefox / Iceraven 等）: テキスト選択時に表示される**ポップアップパネル**から検索。
+- **ツールバーから設定を開ける**: ツールバーのアドオンボタンをクリックすると、設定ページをすぐに開けます。
 - **設定の同期**: 登録したオプションは `storage.sync` に保存され、Firefox アカウントで同期されます。
 - **多言語対応（日本語 / 英語）**: ブラウザの表示言語に合わせて UI を自動で切り替えます（`_locales` による i18n）。
 
@@ -33,6 +34,7 @@ Firefox addon that uses search engines as a genius.
 ### 1. オプションを設定する
 
 アドオンの設定ページ（オプションページ）を開き、検索オプションを登録します。
+設定ページは、ツールバーのアドオンボタンをクリックするか、アドオンマネージャーの「オプション」から開けます。
 
 | 項目 | 説明 |
 | --- | --- |
@@ -98,7 +100,7 @@ Firefox addon that uses search engines as a genius.
 | ファイル | 役割 |
 | --- | --- |
 | `manifest.json` | アドオンのマニフェスト（Manifest V3） |
-| `background.js` | 右クリックメニューの構築、検索 URL の生成、タブを開く処理 |
+| `background.js` | 右クリックメニューの構築、検索 URL の生成、タブを開く処理、ツールバーボタンからの設定ページ表示 |
 | `content.js` | `contextMenus` 非対応環境向けの選択パネル |
 | `options.html` / `options.js` | 検索オプションの設定ページ |
 | `_locales/ja/messages.json` | 日本語の UI 文言 |

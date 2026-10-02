@@ -54,6 +54,9 @@
   "engineNicoNicoSearch": {
     "message": "ニコニコ大百科検索"
   },
+  "actionTitle": {
+    "message": "Search Genius の設定を開く"
+  },
   "optionsPageTitle": {
     "message": "検索オプション設定"
   },

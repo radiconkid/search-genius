@@ -173,6 +173,14 @@ browser.runtime.onMessage.addListener(async (message, sender) => {
   openSearchTab(option, message.selectedText, sender.tab && sender.tab.index);
 });
 
+// ツールバーのボタンクリックで設定ページを開く
+// （action APIが存在しない環境では何もしない）
+if (typeof browser.action !== "undefined") {
+  browser.action.onClicked.addListener(() => {
+    browser.runtime.openOptionsPage();
+  });
+}
+
 // 設定変更時にメニューを再構築する
 // （カスタムエンジンの変更はメニュー表示には影響しないが、URL解決に使うため再構築しておく）
 browser.storage.onChanged.addListener((changes, area) => {

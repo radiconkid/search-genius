@@ -54,6 +54,9 @@
   "engineNicoNicoSearch": {
     "message": "Niconico Pedia search"
   },
+  "actionTitle": {
+    "message": "Open Search Genius settings"
+  },
   "optionsPageTitle": {
     "message": "Search Options"
   },
