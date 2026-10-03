@@ -132,6 +132,15 @@
   "savedStatus": {
     "message": "保存しました"
   },
+  "defaultEngineHeading": {
+    "message": "デフォルト検索エンジン"
+  },
+  "defaultEngineDescription": {
+    "message": "インスタント検索（このサイト内を検索）で使う検索エンジンです。初期値はDuckDuckGoです。"
+  },
+  "defaultEngineLabel": {
+    "message": "デフォルトエンジン"
+  },
   "customEnginesHeading": {
     "message": "カスタム検索エンジン"
   },

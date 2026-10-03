@@ -9,6 +9,8 @@
 
 const STORAGE_KEY = "searchOptions";
 const STACKED_SITE_KEY = "stackedSite";
+const DEFAULT_ENGINE_KEY = "defaultEngine";
+const DEFAULT_ENGINE = "duckduckgo";
 
 // 未設定時に使われる初期値（background.js / options.js と共通の定義）
 // ラベルはブラウザの表示言語に合わせてローカライズし、
@@ -37,19 +39,21 @@ function getDefaultOptions() {
 
 // インスタントサーチ（開いているサイト内を site: で検索する）オプション
 // 常に6番目の選択肢として末尾に追加される（background.js と共通の定義）
-function getInstantSearchOption() {
+// 検索エンジンはオプション画面で設定したデフォルトエンジンを使う
+function getInstantSearchOption(engineId = DEFAULT_ENGINE) {
   return {
     label: browser.i18n.getMessage("optionInstantSearch"),
     prefix: "",
-    engine: "duckduckgo",
+    engine: engineId,
     instant: true
   };
 }
 
 // オプション配列の末尾にインスタントサーチを必ず含める
-function ensureInstantSearchOption(options) {
+// インスタントサーチのエンジンはデフォルトエンジンに合わせる
+function ensureInstantSearchOption(options, engineId = DEFAULT_ENGINE) {
   const withoutInstant = options.filter((option) => !option.instant);
-  return [...withoutInstant, getInstantSearchOption()];
+  return [...withoutInstant, getInstantSearchOption(engineId)];
 }
 
 // contextMenus が使えない環境（Android版Firefox/Iceraven等）でのみ選択パネルを有効化する。
@@ -105,10 +109,14 @@ function initSelectionPanel() {
 
   async function getOptions() {
     try {
-      const stored = await browser.storage.sync.get([STORAGE_KEY, STACKED_SITE_KEY]);
+      const stored = await browser.storage.sync.get([STORAGE_KEY, STACKED_SITE_KEY, DEFAULT_ENGINE_KEY]);
       const base = Array.isArray(stored[STORAGE_KEY]) ? stored[STORAGE_KEY] : getDefaultOptions();
       const stacked = typeof stored[STACKED_SITE_KEY] === "string" ? stored[STACKED_SITE_KEY] : "";
-      return applyStackedLabel(ensureInstantSearchOption(base), stacked);
+      const defaultEngine =
+        typeof stored[DEFAULT_ENGINE_KEY] === "string" && stored[DEFAULT_ENGINE_KEY]
+          ? stored[DEFAULT_ENGINE_KEY]
+          : DEFAULT_ENGINE;
+      return applyStackedLabel(ensureInstantSearchOption(base, defaultEngine), stacked);
     } catch (err) {
       return ensureInstantSearchOption(getDefaultOptions());
     }

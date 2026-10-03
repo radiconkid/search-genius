@@ -5,6 +5,7 @@ const MAX_OPTIONS = 5;
 const STORAGE_KEY = "searchOptions";
 const CUSTOM_ENGINES_KEY = "customEngines";
 const STACKED_SITE_KEY = "stackedSite";
+const DEFAULT_ENGINE_KEY = "defaultEngine";
 
 // 選択可能な検索エンジン（background.js と共通の定義）
 const SEARCH_ENGINES = [
@@ -21,11 +22,12 @@ const DEFAULT_ENGINE = "duckduckgo";
 
 // インスタントサーチ（開いているサイト内を site: で検索する）オプション
 // 常に6番目の選択肢として末尾に追加される（background.js / content.js と共通の定義）
-function getInstantSearchOption() {
+// 検索エンジンはオプション画面で設定したデフォルトエンジンを使う
+function getInstantSearchOption(engineId = DEFAULT_ENGINE) {
   return {
     label: browser.i18n.getMessage("optionInstantSearch"),
     prefix: "",
-    engine: DEFAULT_ENGINE,
+    engine: engineId,
     instant: true
   };
 }
@@ -78,6 +80,7 @@ const saveButton = document.getElementById("save");
 const statusEl = document.getElementById("status");
 const enginesBody = document.getElementById("engines-body");
 const addEngineButton = document.getElementById("add-engine");
+const defaultEngineSelect = document.getElementById("default-engine");
 const toggleOperatorsButton = document.getElementById("toggle-operators");
 const operatorsContent = document.getElementById("operators-content");
 
@@ -150,11 +153,14 @@ function addRow(option = { label: "", prefix: "", engine: DEFAULT_ENGINE }) {
   updateAddButtonState();
 }
 
-// インスタントサーチの行を読み取り専用で追加する（常に6番目の選択肢）
+// インスタントサーチの行を追加する（常に6番目の選択肢）
 // プレフィックスはスタックしたサイト（未スタック時は開いているページ）から
 // 動的に組み立てられるため、編集不可にする
+// 検索エンジンはオプション画面で設定したデフォルトエンジンに追従するため、
+// この行では編集不可（デフォルトエンジンの <select> の変更に合わせて表示を更新する）
 async function addInstantRow() {
-  const option = getInstantSearchOption();
+  const defaultEngine = await getDefaultEngine();
+  const option = getInstantSearchOption(defaultEngine);
   const stacked = await getStackedSite();
 
   const tr = document.createElement("tr");
@@ -171,11 +177,12 @@ async function addInstantRow() {
   labelCell.appendChild(labelInput);
 
   const engineCell = document.createElement("td");
-  const engineInput = document.createElement("input");
-  engineInput.type = "text";
-  engineInput.value = SEARCH_ENGINES.find((engine) => engine.id === option.engine).label;
-  engineInput.disabled = true;
-  engineCell.appendChild(engineInput);
+  const engineSelect = document.createElement("select");
+  engineSelect.className = "engine-select";
+  populateEngineSelect(engineSelect, option.engine);
+  // デフォルトエンジンに追従するため、この行では変更できないようにする
+  engineSelect.disabled = true;
+  engineCell.appendChild(engineSelect);
 
   const prefixCell = document.createElement("td");
   const prefixInput = document.createElement("input");
@@ -195,6 +202,23 @@ async function addInstantRow() {
   tr.appendChild(prefixCell);
   tr.appendChild(removeCell);
   tbody.appendChild(tr);
+}
+
+// インスタントサーチ行の検索エンジン表示を、デフォルトエンジンの選択値に追従させる
+function syncInstantRowEngine() {
+  const instantRow = tbody.querySelector(".instant-row");
+  if (!instantRow) return;
+  const select = instantRow.querySelector(".engine-select");
+  if (!select) return;
+  populateEngineSelect(select, defaultEngineSelect.value || DEFAULT_ENGINE);
+  select.disabled = true;
+}
+
+// 保存済みのデフォルト検索エンジンIDを取得する（未設定・不正時はDEFAULT_ENGINE）
+async function getDefaultEngine() {
+  const stored = await browser.storage.sync.get(DEFAULT_ENGINE_KEY);
+  const engineId = stored[DEFAULT_ENGINE_KEY];
+  return typeof engineId === "string" && engineId ? engineId : DEFAULT_ENGINE;
 }
 
 // スタック中のサイト（ホスト名）を取得する。未スタックなら空文字を返す
@@ -310,6 +334,7 @@ async function loadCustomEngines() {
 
 // 現在の入力内容を配列として取得する（空行は除外）
 // 末尾には常にインスタントサーチ（6番目の選択肢）を追加する
+// インスタントサーチの検索エンジンは、デフォルトエンジンの選択値を使う
 function collectOptions() {
   const options = [];
   for (const tr of getUserRows()) {
@@ -319,7 +344,9 @@ function collectOptions() {
     if (!label && !prefix) continue;
     options.push({ label, prefix, engine });
   }
-  options.push(getInstantSearchOption());
+
+  const instantEngine = defaultEngineSelect.value || DEFAULT_ENGINE;
+  options.push(getInstantSearchOption(instantEngine));
   return options;
 }
 
@@ -343,6 +370,7 @@ async function loadOptions() {
 async function saveOptions() {
   const options = collectOptions();
   const engines = collectCustomEngines();
+  const defaultEngine = defaultEngineSelect.value || DEFAULT_ENGINE;
 
   // カスタムエンジンの検証（URLに %s が含まれているか等）
   const error = validateCustomEngines(engines);
@@ -363,7 +391,8 @@ async function saveOptions() {
 
   await browser.storage.sync.set({
     [STORAGE_KEY]: options,
-    [CUSTOM_ENGINES_KEY]: savedEngines
+    [CUSTOM_ENGINES_KEY]: savedEngines,
+    [DEFAULT_ENGINE_KEY]: defaultEngine
   });
 
   // 保存後のカスタムエンジンを画面に反映する（IDの確定・選択状態の維持）
@@ -383,6 +412,9 @@ function refreshEngineSelects() {
     const current = select.value;
     populateEngineSelect(select, current);
   }
+  // デフォルトエンジンの <select> も同様に再構築する
+  const currentDefault = defaultEngineSelect.value;
+  populateEngineSelect(defaultEngineSelect, currentDefault);
 }
 
 // 検索演算子チートシートの表示／非表示を切り替える
@@ -400,12 +432,17 @@ addRowButton.addEventListener("click", () => addRow());
 addEngineButton.addEventListener("click", () => addEngineRow());
 saveButton.addEventListener("click", saveOptions);
 toggleOperatorsButton.addEventListener("click", toggleOperators);
+// デフォルトエンジンを変更したら、インスタントサーチ行の表示も追従させる
+defaultEngineSelect.addEventListener("change", syncInstantRowEngine);
 
 // カスタムエンジンを先に読み込んでから、オプション行を描画する
 // （オプション行の <select> にカスタムエンジンを含めるため）
 async function init() {
   localizePage();
   await loadCustomEngines();
+  // デフォルトエンジンの <select> を、保存済みの値で初期化する
+  const defaultEngine = await getDefaultEngine();
+  populateEngineSelect(defaultEngineSelect, defaultEngine);
   await loadOptions();
 }
 

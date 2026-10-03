@@ -132,6 +132,15 @@
   "savedStatus": {
     "message": "Saved"
   },
+  "defaultEngineHeading": {
+    "message": "Default search engine"
+  },
+  "defaultEngineDescription": {
+    "message": "The search engine used for the instant search (search this site) option. The default is DuckDuckGo."
+  },
+  "defaultEngineLabel": {
+    "message": "Default engine"
+  },
   "customEnginesHeading": {
     "message": "Custom search engines"
   },

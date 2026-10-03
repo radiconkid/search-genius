@@ -6,6 +6,7 @@
 const STORAGE_KEY = "searchOptions";
 const CUSTOM_ENGINES_KEY = "customEngines";
 const STACKED_SITE_KEY = "stackedSite";
+const DEFAULT_ENGINE_KEY = "defaultEngine";
 const MENU_ID_PREFIX = "search-option-";
 const STACK_MENU_ID = "stack-current-site";
 const UNSTACK_MENU_ID = "unstack-current-site";
@@ -48,23 +49,32 @@ function getDefaultOptions() {
   ];
 }
 
+// 保存済みのデフォルト検索エンジンIDを取得する（未設定・不正時はDEFAULT_ENGINE）
+async function getDefaultEngine() {
+  const stored = await browser.storage.sync.get(DEFAULT_ENGINE_KEY);
+  const engineId = stored[DEFAULT_ENGINE_KEY];
+  return typeof engineId === "string" && engineId ? engineId : DEFAULT_ENGINE;
+}
+
 // インスタントサーチ（開いているサイト内を site: で検索する）オプション
 // 常に6番目の選択肢として末尾に追加される
-function getInstantSearchOption() {
+// 検索エンジンはオプション画面で設定したデフォルトエンジンを使う
+function getInstantSearchOption(engineId = DEFAULT_ENGINE) {
   return {
     label: browser.i18n.getMessage("optionInstantSearch"),
     prefix: "",
-    engine: DEFAULT_ENGINE,
+    engine: engineId,
     instant: true
   };
 }
 
 // オプション配列の末尾にインスタントサーチを必ず含める
 // 新たに追加された場合は added: true を返す（呼び出し側で保存するため）
-function ensureInstantSearchOption(options) {
+// インスタントサーチのエンジンはデフォルトエンジンに合わせて更新する
+function ensureInstantSearchOption(options, engineId = DEFAULT_ENGINE) {
   const hasInstant = options.some((option) => option.instant);
   const withoutInstant = options.filter((option) => !option.instant);
-  return { options: [...withoutInstant, getInstantSearchOption()], added: !hasInstant };
+  return { options: [...withoutInstant, getInstantSearchOption(engineId)], added: !hasInstant };
 }
 
 // 初期カスタム検索エンジン（未設定時に使われる）
@@ -86,10 +96,12 @@ function getDefaultCustomEngines() {
 
 // 保存済みオプションを取得する
 // インスタントサーチが未保存だった場合は、6番目の選択肢として上書き保存する
+// インスタントサーチのエンジンは、設定済みのデフォルトエンジンに合わせる
 async function getOptions() {
   const stored = await browser.storage.sync.get(STORAGE_KEY);
   const base = Array.isArray(stored[STORAGE_KEY]) ? stored[STORAGE_KEY] : getDefaultOptions();
-  const { options, added } = ensureInstantSearchOption(base);
+  const defaultEngine = await getDefaultEngine();
+  const { options, added } = ensureInstantSearchOption(base, defaultEngine);
 
   if (added) {
     await browser.storage.sync.set({ [STORAGE_KEY]: options });
@@ -316,7 +328,7 @@ if (typeof browser.action !== "undefined") {
 browser.storage.onChanged.addListener((changes, area) => {
   if (area !== "sync") return;
 
-  if (changes[STORAGE_KEY] || changes[CUSTOM_ENGINES_KEY] || changes[STACKED_SITE_KEY]) {
+  if (changes[STORAGE_KEY] || changes[CUSTOM_ENGINES_KEY] || changes[STACKED_SITE_KEY] || changes[DEFAULT_ENGINE_KEY]) {
     rebuildMenus();
   }
   // スタック状態が変わったらツールバーボタンの表示も更新する
