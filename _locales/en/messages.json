@@ -48,6 +48,45 @@
   "optionNicoNico": {
     "message": "Niconico Pedia"
   },
+  "optionInstantSearch": {
+    "message": "Search this site"
+  },
+  "optionInstantSearchStacked": {
+    "message": "Search $SITE$",
+    "placeholders": {
+      "site": {
+        "content": "$1"
+      }
+    }
+  },
+  "instantPrefixHint": {
+    "message": "site:<stacked site> (auto)"
+  },
+  "instantPrefixHintStacked": {
+    "message": "site:$SITE$",
+    "placeholders": {
+      "site": {
+        "content": "$1"
+      }
+    }
+  },
+  "menuStackSite": {
+    "message": "Stack this site for instant search"
+  },
+  "menuUnstackSite": {
+    "message": "Clear stacked site"
+  },
+  "actionStackSite": {
+    "message": "Stack this site for instant search"
+  },
+  "actionStackedTitle": {
+    "message": "Stacked: $SITE$ (click to clear)",
+    "placeholders": {
+      "site": {
+        "content": "$1"
+      }
+    }
+  },
   "engine5chSearch": {
     "message": "5ch search"
   },

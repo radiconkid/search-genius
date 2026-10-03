@@ -4,6 +4,7 @@
 const MAX_OPTIONS = 5;
 const STORAGE_KEY = "searchOptions";
 const CUSTOM_ENGINES_KEY = "customEngines";
+const STACKED_SITE_KEY = "stackedSite";
 
 // 選択可能な検索エンジン（background.js と共通の定義）
 const SEARCH_ENGINES = [
@@ -17,6 +18,17 @@ const SEARCH_ENGINES = [
 ];
 
 const DEFAULT_ENGINE = "duckduckgo";
+
+// インスタントサーチ（開いているサイト内を site: で検索する）オプション
+// 常に6番目の選択肢として末尾に追加される（background.js / content.js と共通の定義）
+function getInstantSearchOption() {
+  return {
+    label: browser.i18n.getMessage("optionInstantSearch"),
+    prefix: "",
+    engine: DEFAULT_ENGINE,
+    instant: true
+  };
+}
 
 // 初期値（未設定時に使われる）
 // ラベルはブラウザの表示言語に合わせてローカライズし、
@@ -85,9 +97,14 @@ function localizePage() {
   }
 }
 
+// ユーザーが編集できるオプション行（インスタントサーチの固定行を除く）を取得する
+function getUserRows() {
+  return Array.from(tbody.children).filter((tr) => !tr.classList.contains("instant-row"));
+}
+
 // 1行分の入力欄を生成して tbody に追加する
 function addRow(option = { label: "", prefix: "", engine: DEFAULT_ENGINE }) {
-  if (tbody.children.length >= MAX_OPTIONS) return;
+  if (getUserRows().length >= MAX_OPTIONS) return;
 
   const tr = document.createElement("tr");
 
@@ -133,9 +150,62 @@ function addRow(option = { label: "", prefix: "", engine: DEFAULT_ENGINE }) {
   updateAddButtonState();
 }
 
+// インスタントサーチの行を読み取り専用で追加する（常に6番目の選択肢）
+// プレフィックスはスタックしたサイト（未スタック時は開いているページ）から
+// 動的に組み立てられるため、編集不可にする
+async function addInstantRow() {
+  const option = getInstantSearchOption();
+  const stacked = await getStackedSite();
+
+  const tr = document.createElement("tr");
+  tr.className = "instant-row";
+
+  const labelCell = document.createElement("td");
+  const labelInput = document.createElement("input");
+  labelInput.type = "text";
+  labelInput.className = "label-input";
+  labelInput.value = stacked
+    ? browser.i18n.getMessage("optionInstantSearchStacked", [stacked])
+    : option.label;
+  labelInput.disabled = true;
+  labelCell.appendChild(labelInput);
+
+  const engineCell = document.createElement("td");
+  const engineInput = document.createElement("input");
+  engineInput.type = "text";
+  engineInput.value = SEARCH_ENGINES.find((engine) => engine.id === option.engine).label;
+  engineInput.disabled = true;
+  engineCell.appendChild(engineInput);
+
+  const prefixCell = document.createElement("td");
+  const prefixInput = document.createElement("input");
+  prefixInput.type = "text";
+  prefixInput.className = "prefix-input";
+  prefixInput.value = stacked
+    ? browser.i18n.getMessage("instantPrefixHintStacked", [stacked])
+    : browser.i18n.getMessage("instantPrefixHint");
+  prefixInput.disabled = true;
+  prefixCell.appendChild(prefixInput);
+
+  const removeCell = document.createElement("td");
+  removeCell.className = "col-remove";
+
+  tr.appendChild(labelCell);
+  tr.appendChild(engineCell);
+  tr.appendChild(prefixCell);
+  tr.appendChild(removeCell);
+  tbody.appendChild(tr);
+}
+
+// スタック中のサイト（ホスト名）を取得する。未スタックなら空文字を返す
+async function getStackedSite() {
+  const stored = await browser.storage.sync.get(STACKED_SITE_KEY);
+  return typeof stored[STACKED_SITE_KEY] === "string" ? stored[STACKED_SITE_KEY] : "";
+}
+
 // 行数が上限に達したら「行を追加」ボタンを無効化する
 function updateAddButtonState() {
-  addRowButton.disabled = tbody.children.length >= MAX_OPTIONS;
+  addRowButton.disabled = getUserRows().length >= MAX_OPTIONS;
 }
 
 // 検索エンジンの <select> に、組み込みエンジンとカスタムエンジンの選択肢を流し込む
@@ -239,15 +309,17 @@ async function loadCustomEngines() {
 }
 
 // 現在の入力内容を配列として取得する（空行は除外）
+// 末尾には常にインスタントサーチ（6番目の選択肢）を追加する
 function collectOptions() {
   const options = [];
-  for (const tr of tbody.children) {
+  for (const tr of getUserRows()) {
     const label = tr.querySelector(".label-input").value.trim();
     const prefix = tr.querySelector(".prefix-input").value.trim();
     const engine = tr.querySelector(".engine-select").value || DEFAULT_ENGINE;
     if (!label && !prefix) continue;
     options.push({ label, prefix, engine });
   }
+  options.push(getInstantSearchOption());
   return options;
 }
 
@@ -259,9 +331,11 @@ async function loadOptions() {
     : getDefaultOptions();
 
   tbody.innerHTML = "";
-  for (const option of options) {
+  // インスタントサーチは固定行として扱うため、保存済みの内容からは除外して描画する
+  for (const option of options.filter((option) => !option.instant)) {
     addRow(option);
   }
+  await addInstantRow();
   updateAddButtonState();
 }
 
@@ -304,7 +378,7 @@ async function saveOptions() {
 
 // 各オプション行の検索エンジン <select> を、最新のカスタムエンジン一覧で再構築する
 function refreshEngineSelects() {
-  for (const tr of tbody.children) {
+  for (const tr of getUserRows()) {
     const select = tr.querySelector(".engine-select");
     const current = select.value;
     populateEngineSelect(select, current);
