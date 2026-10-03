@@ -8,6 +8,7 @@
 // background.js に問い合わせて、contextMenus が使えない場合のみパネルを有効化する。
 
 const STORAGE_KEY = "searchOptions";
+const STACKED_SITE_KEY = "stackedSite";
 
 // 未設定時に使われる初期値（background.js / options.js と共通の定義）
 // ラベルはブラウザの表示言語に合わせてローカライズし、
@@ -32,6 +33,23 @@ function getDefaultOptions() {
     { label: browser.i18n.getMessage("optionImageSearch"), prefix: "", engine: "google-images" },
     { label: browser.i18n.getMessage("optionPdfOnly"), prefix: "filetype:pdf", engine: "duckduckgo" }
   ];
+}
+
+// インスタントサーチ（開いているサイト内を site: で検索する）オプション
+// 常に6番目の選択肢として末尾に追加される（background.js と共通の定義）
+function getInstantSearchOption() {
+  return {
+    label: browser.i18n.getMessage("optionInstantSearch"),
+    prefix: "",
+    engine: "duckduckgo",
+    instant: true
+  };
+}
+
+// オプション配列の末尾にインスタントサーチを必ず含める
+function ensureInstantSearchOption(options) {
+  const withoutInstant = options.filter((option) => !option.instant);
+  return [...withoutInstant, getInstantSearchOption()];
 }
 
 // contextMenus が使えない環境（Android版Firefox/Iceraven等）でのみ選択パネルを有効化する。
@@ -87,11 +105,23 @@ function initSelectionPanel() {
 
   async function getOptions() {
     try {
-      const stored = await browser.storage.sync.get(STORAGE_KEY);
-      return Array.isArray(stored[STORAGE_KEY]) ? stored[STORAGE_KEY] : getDefaultOptions();
+      const stored = await browser.storage.sync.get([STORAGE_KEY, STACKED_SITE_KEY]);
+      const base = Array.isArray(stored[STORAGE_KEY]) ? stored[STORAGE_KEY] : getDefaultOptions();
+      const stacked = typeof stored[STACKED_SITE_KEY] === "string" ? stored[STACKED_SITE_KEY] : "";
+      return applyStackedLabel(ensureInstantSearchOption(base), stacked);
     } catch (err) {
-      return getDefaultOptions();
+      return ensureInstantSearchOption(getDefaultOptions());
     }
+  }
+
+  // スタック中のサイトがある場合、インスタントサーチのラベルにサイト名を反映する
+  function applyStackedLabel(options, stacked) {
+    if (!stacked) return options;
+    return options.map((option) =>
+      option.instant
+        ? { ...option, label: browser.i18n.getMessage("optionInstantSearchStacked", [stacked]) }
+        : option
+    );
   }
 
   function showPanel(rect, options) {

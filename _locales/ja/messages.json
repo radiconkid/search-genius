@@ -48,6 +48,45 @@
   "optionNicoNico": {
     "message": "ニコニコ大百科"
   },
+  "optionInstantSearch": {
+    "message": "このサイト内を検索"
+  },
+  "optionInstantSearchStacked": {
+    "message": "$SITE$ を検索",
+    "placeholders": {
+      "site": {
+        "content": "$1"
+      }
+    }
+  },
+  "instantPrefixHint": {
+    "message": "site:<スタックしたサイト>（自動）"
+  },
+  "instantPrefixHintStacked": {
+    "message": "site:$SITE$",
+    "placeholders": {
+      "site": {
+        "content": "$1"
+      }
+    }
+  },
+  "menuStackSite": {
+    "message": "このサイトをスタックしてインスタント検索に使う"
+  },
+  "menuUnstackSite": {
+    "message": "スタックしたサイトを解除"
+  },
+  "actionStackSite": {
+    "message": "このサイトをスタックしてインスタント検索に使う"
+  },
+  "actionStackedTitle": {
+    "message": "スタック中: $SITE$（クリックで解除）",
+    "placeholders": {
+      "site": {
+        "content": "$1"
+      }
+    }
+  },
   "engine5chSearch": {
     "message": "5ch検索"
   },
