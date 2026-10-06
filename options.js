@@ -135,6 +135,12 @@ function addRow(option = { label: "", prefix: "", engine: DEFAULT_ENGINE }) {
 
   const removeCell = document.createElement("td");
   removeCell.className = "col-remove";
+  // スタック中のサイトからメニュー名と site: プレフィックスを貼り付けるボタン（削除ボタンの左）
+  const pasteButton = document.createElement("button");
+  pasteButton.type = "button";
+  pasteButton.className = "paste-stacked-button";
+  pasteButton.textContent = browser.i18n.getMessage("pasteStackedButton");
+  pasteButton.addEventListener("click", () => pasteStackedPrefix(labelInput, prefixInput));
   const removeButton = document.createElement("button");
   removeButton.type = "button";
   removeButton.textContent = browser.i18n.getMessage("removeButton");
@@ -142,6 +148,7 @@ function addRow(option = { label: "", prefix: "", engine: DEFAULT_ENGINE }) {
     tr.remove();
     updateAddButtonState();
   });
+  removeCell.appendChild(pasteButton);
   removeCell.appendChild(removeButton);
 
   tr.appendChild(labelCell);
@@ -225,6 +232,22 @@ async function getDefaultEngine() {
 async function getStackedSite() {
   const stored = await browser.storage.sync.get(STACKED_SITE_KEY);
   return typeof stored[STACKED_SITE_KEY] === "string" ? stored[STACKED_SITE_KEY] : "";
+}
+
+// スタック中のサイトからメニュー名と site: プレフィックスを組み立てて、指定した入力欄に貼り付ける
+// 未スタックの場合はエラーメッセージを表示する
+async function pasteStackedPrefix(labelInput, prefixInput) {
+  const stacked = await getStackedSite();
+  if (!stacked) {
+    statusEl.textContent = browser.i18n.getMessage("pasteStackedNoSite");
+    statusEl.classList.add("error");
+    return;
+  }
+
+  statusEl.classList.remove("error");
+  labelInput.value = stacked;
+  prefixInput.value = `site:${stacked}`;
+  prefixInput.focus();
 }
 
 // 行数が上限に達したら「行を追加」ボタンを無効化する

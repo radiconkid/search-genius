@@ -123,6 +123,12 @@
   "removeButton": {
     "message": "削除"
   },
+  "pasteStackedButton": {
+    "message": "スタック中の検索を貼り付け"
+  },
+  "pasteStackedNoSite": {
+    "message": "スタック中のサイトがありません。"
+  },
   "addRowButton": {
     "message": "行を追加"
   },

@@ -123,6 +123,12 @@
   "removeButton": {
     "message": "Remove"
   },
+  "pasteStackedButton": {
+    "message": "Paste stacked search"
+  },
+  "pasteStackedNoSite": {
+    "message": "No site is currently stacked."
+  },
   "addRowButton": {
     "message": "Add row"
   },
