@@ -34,8 +34,8 @@ function getDefaultOptions() {
     return [
       { label: browser.i18n.getMessage("option5ch"), prefix: "site:5ch.io", engine: "duckduckgo" },
       { label: browser.i18n.getMessage("optionWikiJp"), prefix: "site:ja.wikipedia.org", engine: "duckduckgo" },
-      { label: browser.i18n.getMessage("optionImageSearch"), prefix: "", engine: "google-images" },
       { label: browser.i18n.getMessage("optionNicoNico"), prefix: "site:dic.nicovideo.jp", engine: "duckduckgo" },
+      { label: browser.i18n.getMessage("optionImageSearch"), prefix: "", engine: "google-images" },
       { label: browser.i18n.getMessage("optionPdfOnly"), prefix: "filetype:pdf", engine: "duckduckgo" }
     ];
   }
